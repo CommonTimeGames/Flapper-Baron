@@ -18,4 +18,6 @@ public abstract class GameObject {
     public void setSprite(Sprite sprite) {
         this.sprite = sprite;
     }
+
+    public void destroy(){}
 }

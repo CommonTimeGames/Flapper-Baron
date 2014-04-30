@@ -3,6 +3,7 @@ package com.commontimegames.flapper.core;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.utils.Disposable;
 
 /**
  * Created by c14726 on 4/28/14.
@@ -10,6 +11,8 @@ import com.badlogic.gdx.physics.box2d.Body;
 public abstract class RigidBody extends GameObject {
 
     public static final float BOX_TO_WORLD = 10f;
+    public static final float WORLD_TO_BOX = 1/10f;
+
     public static final float BOX_STEP_TIME = 1/45f;
 
     protected Body body;
@@ -20,7 +23,8 @@ public abstract class RigidBody extends GameObject {
            and rotation with sprite
            position/rotation.
          */
-        if(sprite != null){
+        if(sprite != null
+             && body != null){
             Vector2 position = body.getPosition();
 
             this.sprite.setPosition(position.x * BOX_TO_WORLD,
@@ -29,6 +33,7 @@ public abstract class RigidBody extends GameObject {
             this.sprite.setRotation(MathUtils.radiansToDegrees
                     * body.getAngle());
         }
+
     }
 
     public Body getBody() {
@@ -37,5 +42,15 @@ public abstract class RigidBody extends GameObject {
 
     public void setBody(Body body) {
         this.body = body;
+    }
+
+    public void destroy(){
+        /* Remove body from Box2D world
+           when we're done.
+         */
+        if(body != null){
+            body.getWorld().destroyBody(body);
+            body = null;
+        }
     }
 }
