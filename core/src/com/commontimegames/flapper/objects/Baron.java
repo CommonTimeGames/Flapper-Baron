@@ -11,7 +11,7 @@ import com.commontimegames.flapper.core.RigidBody;
  */
 public class Baron extends RigidBody {
 
-    public static final float FLAP_FORCE = 10000f;
+    public static final float FLAP_FORCE = (float)Math.pow(10,20);
 
     public Baron(World world){
         BodyDef bodyDef = new BodyDef();
@@ -25,22 +25,43 @@ public class Baron extends RigidBody {
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = circle;
-        fixtureDef.density = 0.4f;
+        fixtureDef.density = 0.0001f;
         fixtureDef.friction = 0.4f;
-        fixtureDef.restitution = 0.7f;
+        fixtureDef.restitution = 1f;
 
         Fixture fixture = body.createFixture(fixtureDef);
         circle.dispose();
     }
 
+    public void update(){
+        Gdx.app.log("Baron", "Vel x: "
+                    + body.getLinearVelocity().x
+                        + ", Vel y: " + body.getLinearVelocity().y
+                            + ", mag: " + body.getLinearVelocity().len());
+    }
     public void flap(float x, float y){
-        Gdx.app.log("Baron", "Baron.flap()");
+        y = Gdx.graphics.getHeight() - y;
+
         Vector2 pos = body.getPosition();
-        body.applyLinearImpulse(FLAP_FORCE * (x - Gdx.graphics.getWidth()/2f),
-                                FLAP_FORCE * y,
+        Vector2 dir = new Vector2(x-pos.x, y-pos.y).nor().scl(FLAP_FORCE);
+        //Vector2 dir = new Vector2(x-pos.x, y-pos.y).scl(500);
+
+        body.applyLinearImpulse(dir.x,
+                                dir.y,
                                 pos.x,
                                 pos.y,
                                 true);
+
+        Gdx.app.log("Baron", "Baron.flap(" + x + "," + y +") - "
+                    + pos.x + ", " + pos.y);
+
     }
     public void draw(SpriteBatch batch) {}
+
+    public static enum FlapperState{
+        Normal,
+        Flapping,
+        Spinning,
+        Dead
+    }
 }

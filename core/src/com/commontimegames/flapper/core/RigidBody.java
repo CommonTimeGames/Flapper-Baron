@@ -10,9 +10,9 @@ import com.badlogic.gdx.utils.Disposable;
  */
 public abstract class RigidBody extends GameObject {
 
+    public static final float BOX_GRAVITY = 100;
     public static final float BOX_TO_WORLD = 10f;
     public static final float WORLD_TO_BOX = 1/10f;
-
     public static final float BOX_STEP_TIME = 1/45f;
 
     protected Body body;

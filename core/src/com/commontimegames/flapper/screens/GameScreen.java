@@ -30,7 +30,7 @@ public class GameScreen implements Screen, InputProcessor{
     public GameScreen(){
         batch = new SpriteBatch();
         img = new Texture("badlogic.jpg");
-        world = new World(new Vector2(0, -30), true);
+        world = new World(new Vector2(0, -1 * RigidBody.BOX_GRAVITY), true);
         debugRenderer = new Box2DDebugRenderer();
         baron = new Baron(world);
         ground = new Ground(world);
@@ -46,8 +46,7 @@ public class GameScreen implements Screen, InputProcessor{
         batch.end();
         debugRenderer.render(world, batch.getProjectionMatrix());
 
-        Body body = baron.getBody();
-        //body.applyLinearImpulse(100f, 0, body.getPosition().x, body.getPosition().y, true);
+        baron.update();
         world.step(RigidBody.BOX_STEP_TIME, 6, 2);
     }
 
@@ -84,6 +83,10 @@ public class GameScreen implements Screen, InputProcessor{
 
     @Override
     public boolean keyDown(int keycode) {
+        if(keycode == Input.Keys.SPACE){
+            baron.getBody().setTransform(100,300, 0);
+            baron.getBody().setLinearVelocity(0f,0f);
+        }
         return false;
     }
 
