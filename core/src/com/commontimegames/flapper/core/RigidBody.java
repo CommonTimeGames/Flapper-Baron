@@ -10,11 +10,6 @@ import com.badlogic.gdx.utils.Disposable;
  */
 public abstract class RigidBody extends GameObject {
 
-    public static final float BOX_GRAVITY = 100;
-    public static final float BOX_TO_WORLD = 10f;
-    public static final float WORLD_TO_BOX = 1/10f;
-    public static final float BOX_STEP_TIME = 1/45f;
-
     protected Body body;
 
     public void update(){
@@ -27,12 +22,13 @@ public abstract class RigidBody extends GameObject {
              && body != null){
             Vector2 position = body.getPosition();
 
-            this.sprite.setPosition(position.x * BOX_TO_WORLD,
-                    position.y * BOX_TO_WORLD);
+            this.sprite.setPosition(position.x * Constants.WORLD_TO_SCREEN,
+                    position.y * Constants.WORLD_TO_SCREEN);
 
             this.sprite.setRotation(MathUtils.radiansToDegrees
                     * body.getAngle());
-        }
+
+         }
 
     }
 

@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.commontimegames.flapper.core.Constants;
 import com.commontimegames.flapper.core.RigidBody;
 
 /**
@@ -11,49 +12,52 @@ import com.commontimegames.flapper.core.RigidBody;
  */
 public class Baron extends RigidBody {
 
-    public static final float FLAP_FORCE = (float)Math.pow(10,20);
+    public static final float FLAP_FORCE = 100;
 
     public Baron(World world){
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(100, 300);
+        bodyDef.position.set(Constants.WORLD_CENTER_X, Constants.WORLD_CENTER_Y);
 
         body = world.createBody(bodyDef);
 
         CircleShape circle = new CircleShape();
-        circle.setRadius(30f);
+        circle.setRadius(2);
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = circle;
-        fixtureDef.density = 0.0001f;
+        fixtureDef.density = 0.5f;
         fixtureDef.friction = 0.4f;
-        fixtureDef.restitution = 1f;
+        fixtureDef.restitution = 0.4f;
 
         Fixture fixture = body.createFixture(fixtureDef);
         circle.dispose();
     }
 
     public void update(){
-        Gdx.app.log("Baron", "Vel x: "
-                    + body.getLinearVelocity().x
-                        + ", Vel y: " + body.getLinearVelocity().y
-                            + ", mag: " + body.getLinearVelocity().len());
+        //Gdx.app.log("Baron", "Vel x: "
+         //           + body.getLinearVelocity().x
+         //               + ", Vel y: " + body.getLinearVelocity().y
+         //                   + ", mag: " + body.getLinearVelocity().len());
     }
-    public void flap(float x, float y){
-        y = Gdx.graphics.getHeight() - y;
+    public void flap(float screenX, float screenY){
+
+        float worldX = screenX * Constants.SCREEN_TO_WORLD;
+        float worldY = Constants.WORLD_HEIGHT - (screenY * Constants.SCREEN_TO_WORLD);
 
         Vector2 pos = body.getPosition();
-        Vector2 dir = new Vector2(x-pos.x, y-pos.y).nor().scl(FLAP_FORCE);
-        //Vector2 dir = new Vector2(x-pos.x, y-pos.y).scl(500);
+        Vector2 dir = new Vector2(worldX-pos.x, worldY-pos.y).nor().scl(FLAP_FORCE);
 
+        body.setLinearVelocity(0,0);
         body.applyLinearImpulse(dir.x,
                                 dir.y,
                                 pos.x,
                                 pos.y,
                                 true);
 
-        Gdx.app.log("Baron", "Baron.flap(" + x + "," + y +") - "
-                    + pos.x + ", " + pos.y);
+        Gdx.app.log("Baron",
+                "Baron.flap(" + screenX + "," + screenY +
+                        ") -> (" + worldX + "," + worldY + ")");
 
     }
     public void draw(SpriteBatch batch) {}

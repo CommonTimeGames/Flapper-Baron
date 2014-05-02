@@ -2,11 +2,13 @@ package com.commontimegames.flapper.core;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 
 /**
  * Created by c14726 on 4/28/14.
  */
 public abstract class GameObject {
+
     protected Sprite sprite;
 
     public abstract void update();

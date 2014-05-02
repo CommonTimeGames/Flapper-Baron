@@ -8,10 +8,9 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
-import com.commontimegames.flapper.core.RigidBody;
+import com.commontimegames.flapper.core.Constants;
 import com.commontimegames.flapper.objects.Baron;
 import com.commontimegames.flapper.objects.Ground;
 
@@ -29,8 +28,9 @@ public class GameScreen implements Screen, InputProcessor{
 
     public GameScreen(){
         batch = new SpriteBatch();
+        batch.getProjectionMatrix().scale(Constants.WORLD_TO_SCREEN, Constants.WORLD_TO_SCREEN, 1);
         img = new Texture("badlogic.jpg");
-        world = new World(new Vector2(0, -1 * RigidBody.BOX_GRAVITY), true);
+        world = new World(new Vector2(0, -1 * Constants.BOX_GRAVITY), true);
         debugRenderer = new Box2DDebugRenderer();
         baron = new Baron(world);
         ground = new Ground(world);
@@ -47,7 +47,7 @@ public class GameScreen implements Screen, InputProcessor{
         debugRenderer.render(world, batch.getProjectionMatrix());
 
         baron.update();
-        world.step(RigidBody.BOX_STEP_TIME, 6, 2);
+        world.step(Constants.BOX_STEP_TIME, 6, 2);
     }
 
     @Override
@@ -84,7 +84,7 @@ public class GameScreen implements Screen, InputProcessor{
     @Override
     public boolean keyDown(int keycode) {
         if(keycode == Input.Keys.SPACE){
-            baron.getBody().setTransform(100,300, 0);
+            baron.getBody().setTransform(Constants.WORLD_CENTER_X,Constants.WORLD_CENTER_Y, 0);
             baron.getBody().setLinearVelocity(0f,0f);
         }
         return false;
