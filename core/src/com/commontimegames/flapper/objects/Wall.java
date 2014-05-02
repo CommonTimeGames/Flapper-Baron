@@ -27,6 +27,7 @@ public class Wall extends RigidBody {
 
         groundBox.setAsBox(width, height);
         body.createFixture(groundBox, 0.0f);
+        body.setUserData(this);
 
         groundBox.dispose();
     }

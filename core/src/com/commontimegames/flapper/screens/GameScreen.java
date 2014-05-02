@@ -8,17 +8,17 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.physics.box2d.*;
 import com.commontimegames.flapper.core.Constants;
 import com.commontimegames.flapper.objects.Baron;
-import com.commontimegames.flapper.objects.Ground;
 import com.commontimegames.flapper.objects.Wall;
 
 /**
  * Created by c14726 on 4/29/14.
  */
-public class GameScreen implements Screen, InputProcessor{
+public class GameScreen implements Screen,
+                                   InputProcessor,
+                                   ContactListener{
 
     SpriteBatch batch;
     Texture img;
@@ -57,6 +57,7 @@ public class GameScreen implements Screen, InputProcessor{
                            Constants.WORLD_CENTER_X, Constants.WORLD_HEIGHT+1,
                            Constants.WORLD_WIDTH, 1);
 
+        world.setContactListener(this);
         Gdx.input.setInputProcessor(this);
     }
 
@@ -151,5 +152,27 @@ public class GameScreen implements Screen, InputProcessor{
     @Override
     public boolean scrolled(int amount) {
         return false;
+    }
+
+    @Override
+    public void beginContact(Contact contact) {
+        Class a = contact.getFixtureA().getBody().getUserData().getClass();
+        Class b = contact.getFixtureB().getBody().getUserData().getClass();
+        Gdx.app.log("GameScreen", "Contact between " + a + ", and " + b);
+    }
+
+    @Override
+    public void endContact(Contact contact) {
+
+    }
+
+    @Override
+    public void preSolve(Contact contact, Manifold oldManifold) {
+
+    }
+
+    @Override
+    public void postSolve(Contact contact, ContactImpulse impulse) {
+
     }
 }

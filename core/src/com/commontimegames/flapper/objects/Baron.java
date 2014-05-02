@@ -31,6 +31,8 @@ public class Baron extends RigidBody {
         fixtureDef.restitution = 0.4f;
 
         Fixture fixture = body.createFixture(fixtureDef);
+        body.setUserData(this);
+
         circle.dispose();
     }
 
