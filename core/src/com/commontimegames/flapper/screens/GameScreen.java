@@ -13,6 +13,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.commontimegames.flapper.core.Constants;
 import com.commontimegames.flapper.objects.Baron;
 import com.commontimegames.flapper.objects.Ground;
+import com.commontimegames.flapper.objects.Wall;
 
 /**
  * Created by c14726 on 4/29/14.
@@ -23,7 +24,12 @@ public class GameScreen implements Screen, InputProcessor{
     Texture img;
     World world;
     Baron baron;
-    Ground ground;
+
+    Wall ground;
+    Wall leftWall;
+    Wall rightWall;
+    Wall ceiling;
+
     Box2DDebugRenderer debugRenderer;
 
     public GameScreen(){
@@ -32,8 +38,25 @@ public class GameScreen implements Screen, InputProcessor{
         img = new Texture("badlogic.jpg");
         world = new World(new Vector2(0, -1 * Constants.BOX_GRAVITY), true);
         debugRenderer = new Box2DDebugRenderer();
+
         baron = new Baron(world);
-        ground = new Ground(world);
+
+        ground = new Wall(world,
+                          Constants.WORLD_CENTER_X, 0,
+                          Constants.WORLD_WIDTH, 1);
+
+        leftWall = new Wall(world,
+                            -1, Constants.WORLD_CENTER_Y,
+                            1, Constants.WORLD_HEIGHT);
+
+        rightWall = new Wall(world,
+                             Constants.WORLD_WIDTH+1, Constants.WORLD_CENTER_Y,
+                             1, Constants.WORLD_HEIGHT);
+
+        ceiling = new Wall(world,
+                           Constants.WORLD_CENTER_X, Constants.WORLD_HEIGHT+1,
+                           Constants.WORLD_WIDTH, 1);
+
         Gdx.input.setInputProcessor(this);
     }
 
