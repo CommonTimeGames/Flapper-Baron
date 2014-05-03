@@ -1,5 +1,9 @@
 package com.commontimegames.flapper.core;
 
+import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+
+import java.util.Iterator;
 import java.util.LinkedList;
 
 /**
@@ -7,9 +11,11 @@ import java.util.LinkedList;
  */
 public class ProceduralContentQueue {
     private LinkedList <GameObject> contentQueue;
+    private LinkedList <GameObject> tempQueue;
 
     public ProceduralContentQueue(){
         contentQueue = new LinkedList<GameObject>();
+        tempQueue = new LinkedList<GameObject>();
     }
 
     public void add(GameObject g){
@@ -23,19 +29,33 @@ public class ProceduralContentQueue {
     }
 
     public void recycleOffScreen(){
-        GameObject g = contentQueue.peekLast();
 
-        if(g.isOffscreen()){
-            contentQueue.removeLast();
+        for(Iterator<GameObject> i = contentQueue.iterator();
+                i.hasNext();){
 
-            GameObject head = contentQueue.peekFirst();
+            GameObject g = i.next();
 
-            g.setPositionY(head.getPositionY());
+            if(g.isOffscreen()){
+                i.remove();
+                tempQueue.addFirst(g);
+            }
+        }
+        int offsetCounter = 0;
+
+        for(Iterator<GameObject> i = tempQueue.iterator();
+                i.hasNext();){
+
+            GameObject g = i.next();
+
             g.reset();
-
+            g.setPositionY(Constants.WORLD_HEIGHT
+                            + (Constants.CONTENT_OFFSET * offsetCounter));
             contentQueue.addFirst(g);
+
+            offsetCounter++;
         }
 
+        tempQueue.clear();
     }
 
 }

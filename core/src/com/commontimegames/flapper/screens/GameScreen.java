@@ -61,10 +61,10 @@ public class GameScreen implements Screen,
                            Constants.WORLD_WIDTH, 1);
 
         pq = new ProceduralContentQueue();
-        pq.add(new Branch(Branch.BranchType.None, world, Constants.WORLD_CENTER_X, 0));
-        pq.add(new Branch(Branch.BranchType.None, world, Constants.WORLD_CENTER_X, 6));
+        pq.add(new Branch(Branch.BranchType.Left, world, Constants.WORLD_CENTER_X, 0));
+        pq.add(new Branch(Branch.BranchType.Left, world, Constants.WORLD_CENTER_X, 6));
         pq.add(new Branch(Branch.BranchType.Left, world, Constants.WORLD_CENTER_X, 12));
-        pq.add(new Branch(Branch.BranchType.None, world, Constants.WORLD_CENTER_X, 8));
+        pq.add(new Branch(Branch.BranchType.Left, world, Constants.WORLD_CENTER_X, 8));
 
         world.setContactListener(this);
         Gdx.input.setInputProcessor(this);
@@ -86,6 +86,8 @@ public class GameScreen implements Screen,
                 && baron.getPositionY() >= 0.75 * Constants.WORLD_HEIGHT){
             pq.scroll();
         }
+
+        pq.recycleOffScreen();
 
         world.step(Constants.BOX_STEP_TIME, 6, 2);
     }
