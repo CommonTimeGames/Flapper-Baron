@@ -17,9 +17,11 @@ public class Wall extends RigidBody {
                 float posX, float posY,
                 float width, float height){
 
+        super(posX, posY);
+
         BodyDef groundBodyDef = new BodyDef();
         groundBodyDef.type = BodyDef.BodyType.StaticBody;
-        groundBodyDef.position.set(posX, posY);
+        groundBodyDef.position.set(positionX, positionY);
 
         body = world.createBody(groundBodyDef);
 

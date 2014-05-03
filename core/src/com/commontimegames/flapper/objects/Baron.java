@@ -14,10 +14,13 @@ public class Baron extends RigidBody {
 
     public static final float FLAP_FORCE = 100;
 
+    private FlapperState state;
+
     public Baron(World world){
+        super(Constants.WORLD_CENTER_X, Constants.WORLD_CENTER_Y);
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(Constants.WORLD_CENTER_X, Constants.WORLD_CENTER_Y);
+        bodyDef.position.set(positionX, positionY);
 
         body = world.createBody(bodyDef);
 
@@ -37,12 +40,19 @@ public class Baron extends RigidBody {
     }
 
     public void update(){
-        //Gdx.app.log("Baron", "Vel x: "
-         //           + body.getLinearVelocity().x
-         //               + ", Vel y: " + body.getLinearVelocity().y
-         //                   + ", mag: " + body.getLinearVelocity().len());
+        super.update();
+
+       // Gdx.app.log("Baron", "Pos x: " + positionX
+        //                + " Pos y: " + positionY);
+
+       if(state == FlapperState.Flapping
+               && body.getLinearVelocity().y < 0){
+           state = FlapperState.Normal;
+           Gdx.app.log("Baron", "Done flapping");
+       }
     }
     public void flap(float screenX, float screenY){
+        state = FlapperState.Flapping;
 
         float worldX = screenX * Constants.SCREEN_TO_WORLD;
         float worldY = Constants.WORLD_HEIGHT - (screenY * Constants.SCREEN_TO_WORLD);
@@ -63,6 +73,14 @@ public class Baron extends RigidBody {
 
     }
     public void draw(SpriteBatch batch) {}
+
+    public FlapperState getState() {
+        return state;
+    }
+
+    public void setState(FlapperState state) {
+        this.state = state;
+    }
 
     public static enum FlapperState{
         Normal,

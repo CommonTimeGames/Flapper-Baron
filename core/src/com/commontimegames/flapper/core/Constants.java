@@ -16,7 +16,8 @@ public class Constants {
     public static final float WORLD_CENTER_X = WORLD_WIDTH * 0.5f;
     public static final float WORLD_CENTER_Y = WORLD_HEIGHT * 0.5f;
 
-    public static final float WORLD_SCROLL_SPEED = 10;
+    public static final float WORLD_SCROLL_SPEED = 0.1f;
+    public static final float CONTENT_OFFSET = 6f;
 
     public static final float BOX_GRAVITY = 20;
     public static final float BOX_STEP_TIME = 1/45f;
