@@ -14,7 +14,7 @@ public class Baron extends RigidBody {
 
     public static final float FLAP_FORCE = 100;
 
-    private FlapperState state;
+    private BaronState state;
 
     public Baron(World world){
         super(Constants.WORLD_CENTER_X, Constants.WORLD_CENTER_Y);
@@ -31,7 +31,7 @@ public class Baron extends RigidBody {
         fixtureDef.shape = circle;
         fixtureDef.density = 0.5f;
         fixtureDef.friction = 0.4f;
-        fixtureDef.restitution = 0.4f;
+        fixtureDef.restitution = 0.2f;
 
         Fixture fixture = body.createFixture(fixtureDef);
         body.setUserData(this);
@@ -45,14 +45,19 @@ public class Baron extends RigidBody {
        // Gdx.app.log("Baron", "Pos x: " + positionX
         //                + " Pos y: " + positionY);
 
-       if(state == FlapperState.Flapping
+       if(state == BaronState.Flapping
                && body.getLinearVelocity().y < 0){
-           state = FlapperState.Normal;
+           state = BaronState.Normal;
            Gdx.app.log("Baron", "Done flapping");
        }
     }
     public void flap(float screenX, float screenY){
-        state = FlapperState.Flapping;
+
+        if(state == BaronState.Dead){
+            return;
+        }
+
+        state = BaronState.Flapping;
 
         float worldX = screenX * Constants.SCREEN_TO_WORLD;
         float worldY = Constants.WORLD_HEIGHT - (screenY * Constants.SCREEN_TO_WORLD);
@@ -74,15 +79,18 @@ public class Baron extends RigidBody {
     }
     public void draw(SpriteBatch batch) {}
 
-    public FlapperState getState() {
+    public BaronState getState() {
         return state;
     }
 
-    public void setState(FlapperState state) {
+    public void setState(BaronState state) {
         this.state = state;
+        if(this.state == BaronState.Dead){
+            Gdx.app.log("Baron", "The baron is dead!");
+        }
     }
 
-    public static enum FlapperState{
+    public static enum BaronState {
         Normal,
         Flapping,
         Spinning,

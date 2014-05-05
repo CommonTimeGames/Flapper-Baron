@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.commontimegames.flapper.core.Constants;
+import com.commontimegames.flapper.core.GameObject;
 import com.commontimegames.flapper.core.ProceduralContentQueue;
 import com.commontimegames.flapper.objects.Baron;
 import com.commontimegames.flapper.objects.Branch;
@@ -45,7 +46,7 @@ public class GameScreen implements Screen,
         baron = new Baron(world);
 
         ground = new Wall(world,
-                          Constants.WORLD_CENTER_X, 0,
+                          Constants.WORLD_CENTER_X, -6,
                           Constants.WORLD_WIDTH, 1);
 
         leftWall = new Wall(world,
@@ -61,10 +62,10 @@ public class GameScreen implements Screen,
                            Constants.WORLD_WIDTH, 1);
 
         pq = new ProceduralContentQueue();
-        pq.add(new Branch(Branch.BranchType.Left, world, Constants.WORLD_CENTER_X, 0));
-        pq.add(new Branch(Branch.BranchType.Left, world, Constants.WORLD_CENTER_X, 6));
-        pq.add(new Branch(Branch.BranchType.Left, world, Constants.WORLD_CENTER_X, 12));
-        pq.add(new Branch(Branch.BranchType.Left, world, Constants.WORLD_CENTER_X, 8));
+        pq.add(new Branch(world, Constants.WORLD_CENTER_X, 0));
+        pq.add(new Branch(world, Constants.WORLD_CENTER_X, 6));
+        pq.add(new Branch(world, Constants.WORLD_CENTER_X, 12));
+        pq.add(new Branch(world, Constants.WORLD_CENTER_X, 18));
 
         world.setContactListener(this);
         Gdx.input.setInputProcessor(this);
@@ -82,8 +83,7 @@ public class GameScreen implements Screen,
 
         baron.update();
 
-        if(baron.getState() == Baron.FlapperState.Flapping
-                && baron.getPositionY() >= 0.75 * Constants.WORLD_HEIGHT){
+        if(baron.getState() == Baron.BaronState.Flapping){
             pq.scroll();
         }
 
@@ -128,6 +128,7 @@ public class GameScreen implements Screen,
         if(keycode == Input.Keys.SPACE){
             baron.getBody().setTransform(Constants.WORLD_CENTER_X,Constants.WORLD_CENTER_Y, 0);
             baron.getBody().setLinearVelocity(0f,0f);
+            baron.setState(Baron.BaronState.Normal);
         }
         return false;
     }
@@ -174,9 +175,19 @@ public class GameScreen implements Screen,
 
     @Override
     public void beginContact(Contact contact) {
-        Class a = contact.getFixtureA().getBody().getUserData().getClass();
-        Class b = contact.getFixtureB().getBody().getUserData().getClass();
-        Gdx.app.log("GameScreen", "Contact between " + a + ", and " + b);
+        GameObject a = (GameObject)contact.getFixtureA().getBody().getUserData();
+        GameObject b = (GameObject)contact.getFixtureB().getBody().getUserData();
+
+        Gdx.app.log("GameScreen", "Contact between " + a.getClass() + ", and " + b.getClass());
+
+        if( (a instanceof Baron && b == ground)
+                || (b instanceof Baron && a == ground)) {
+            baron.setState(Baron.BaronState.Dead);
+        } else if ((a instanceof Baron && b instanceof Branch)
+                    || (b instanceof Baron && a instanceof Branch)
+                    && baron.getState() != Baron.BaronState.Spinning){
+            baron.setState(Baron.BaronState.Dead);
+        }
     }
 
     @Override
