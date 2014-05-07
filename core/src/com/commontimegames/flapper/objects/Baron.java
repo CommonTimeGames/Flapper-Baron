@@ -5,12 +5,13 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.commontimegames.flapper.core.Constants;
+import com.commontimegames.flapper.core.GameObject;
 import com.commontimegames.flapper.core.RigidBody;
 
 /**
  * Created by c14726 on 4/28/14.
  */
-public class Baron extends RigidBody {
+public class Baron extends RigidBody implements RigidBody.Collider{
 
     public static final float FLAP_FORCE = 100;
 
@@ -85,7 +86,7 @@ public class Baron extends RigidBody {
 
     public void setState(BaronState state) {
         this.state = state;
-        if(this.state == BaronState.Dead){
+        if (this.state == BaronState.Dead) {
             Gdx.app.log("Baron", "The baron is dead!");
         }
     }
@@ -95,5 +96,13 @@ public class Baron extends RigidBody {
         Flapping,
         Spinning,
         Dead
+    }
+
+    @Override
+    public void onHit(GameObject g) {
+        if(g instanceof Squirrel
+                || Constants.GROUND_NAME.equalsIgnoreCase(g.getName())){
+            setState(BaronState.Dead);
+        }
     }
 }

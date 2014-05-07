@@ -12,6 +12,7 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.commontimegames.flapper.core.Constants;
 import com.commontimegames.flapper.core.GameObject;
 import com.commontimegames.flapper.core.ProceduralContentQueue;
+import com.commontimegames.flapper.core.RigidBody;
 import com.commontimegames.flapper.objects.Baron;
 import com.commontimegames.flapper.objects.Branch;
 import com.commontimegames.flapper.objects.Wall;
@@ -49,6 +50,8 @@ public class GameScreen implements Screen,
                           Constants.WORLD_CENTER_X, -6,
                           Constants.WORLD_WIDTH, 1);
 
+        ground.setName(Constants.GROUND_NAME);
+
         leftWall = new Wall(world,
                             -1, Constants.WORLD_CENTER_Y,
                             1, Constants.WORLD_HEIGHT);
@@ -62,10 +65,10 @@ public class GameScreen implements Screen,
                            Constants.WORLD_WIDTH, 1);
 
         pq = new ProceduralContentQueue();
-        pq.add(new Branch(world, Constants.WORLD_CENTER_X, 0));
-        pq.add(new Branch(world, Constants.WORLD_CENTER_X, 6));
-        pq.add(new Branch(world, Constants.WORLD_CENTER_X, 12));
-        pq.add(new Branch(world, Constants.WORLD_CENTER_X, 18));
+        pq.add(new Branch(Branch.BranchType.Left, world, Constants.WORLD_CENTER_X, 0));
+        pq.add(new Branch(Branch.BranchType.Left, world, Constants.WORLD_CENTER_X, 6));
+        pq.add(new Branch(Branch.BranchType.Left, world, Constants.WORLD_CENTER_X, 12));
+        pq.add(new Branch(Branch.BranchType.Left, world, Constants.WORLD_CENTER_X, 18));
 
         world.setContactListener(this);
         Gdx.input.setInputProcessor(this);
@@ -145,10 +148,10 @@ public class GameScreen implements Screen,
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        Gdx.app.log("GameScreen", "touchDown: x: " + screenX
-                           + ", y: " + screenY
-                           + " pointer: " + pointer
-                           + " button: " + button);
+        //Gdx.app.log("GameScreen", "touchDown: x: " + screenX
+        //                   + ", y: " + screenY
+        //                   + " pointer: " + pointer
+        //                   + " button: " + button);
         baron.flap(screenX, screenY);
         return true;
     }
@@ -178,16 +181,14 @@ public class GameScreen implements Screen,
         GameObject a = (GameObject)contact.getFixtureA().getBody().getUserData();
         GameObject b = (GameObject)contact.getFixtureB().getBody().getUserData();
 
-        Gdx.app.log("GameScreen", "Contact between " + a.getClass() + ", and " + b.getClass());
-
-        if( (a instanceof Baron && b == ground)
-                || (b instanceof Baron && a == ground)) {
-            baron.setState(Baron.BaronState.Dead);
-        } else if ((a instanceof Baron && b instanceof Branch)
-                    || (b instanceof Baron && a instanceof Branch)
-                    && baron.getState() != Baron.BaronState.Spinning){
-            baron.setState(Baron.BaronState.Dead);
+        if(a instanceof RigidBody.Collider){
+            ((RigidBody.Collider)a).onHit(b);
         }
+        if(b instanceof RigidBody.Collider){
+            ((RigidBody.Collider)b).onHit(a);
+        }
+
+        Gdx.app.log("GameScreen", "Contact between " + a.getClass() + ", and " + b.getClass());
     }
 
     @Override

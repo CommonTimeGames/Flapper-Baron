@@ -23,4 +23,6 @@ public class Constants {
     public static final float BOX_GRAVITY = 20;
     public static final float BOX_STEP_TIME = 1/45f;
 
+    public static final String GROUND_NAME = "ground";
+
 }

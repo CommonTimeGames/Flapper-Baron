@@ -72,10 +72,15 @@ public abstract class RigidBody extends GameObject {
         /* Remove body from Box2D world
            when we're done.
          */
+        super.destroy();
         if(body != null){
             body.getWorld().destroyBody(body);
             body = null;
         }
+    }
+
+    public interface Collider{
+        public void onHit(GameObject g);
     }
 
 
