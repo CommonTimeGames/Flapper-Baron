@@ -60,7 +60,7 @@ public class Branch extends GameObject implements ProceduralContentQueue.Procedu
                         SQUIRREL_OFFSET, 0);
                 break;
         }
-        theWall = new Wall(world, positionX, positionY, 2, Constants.CONTENT_OFFSET);
+        theWall = new Wall(world, positionX, positionY, 2.25f, Constants.CONTENT_OFFSET);
         theWall.getBody().setActive(false);
         add(theWall);
     }
@@ -84,13 +84,13 @@ public class Branch extends GameObject implements ProceduralContentQueue.Procedu
 
     @Override
     public boolean isOffscreen() {
-        return positionY < - 0.5 * Constants.CONTENT_OFFSET;
+        return positionY < -1 * Constants.CONTENT_OFFSET;
     }
 
     @Override
     public void scroll(float amount){
        setPositionY(positionY - amount);
-       Gdx.app.log("Branch", "Scrolled to : " + positionY);
+       //Gdx.app.log("Branch", "Scrolled to : " + positionY);
     }
 
 
@@ -99,7 +99,6 @@ public class Branch extends GameObject implements ProceduralContentQueue.Procedu
         branchType = getNewBranchType();
         Gdx.app.log("Branch", "Branch type changed to: " + branchType);
         init(world);
-        setPositionY(Constants.WORLD_HEIGHT + Constants.CONTENT_OFFSET);
     }
 
     public static BranchType getNewBranchType(){

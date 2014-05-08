@@ -1,8 +1,5 @@
 package com.commontimegames.flapper.core;
 
-import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
-
 import java.util.Iterator;
 import java.util.LinkedList;
 
@@ -45,6 +42,10 @@ public class ProceduralContentQueue {
                 i.hasNext();){
             ProceduralContent p = i.next();
             p.reset();
+
+            ProceduralContent top = contentQueue.peekFirst();
+            p.setPositionY(top.getPositionY() + 2 * Constants.CONTENT_OFFSET);
+
             contentQueue.addFirst(p);
         }
 
@@ -56,6 +57,10 @@ public class ProceduralContentQueue {
         public boolean isOffscreen();
         public void scroll(float amount);
         public void reset();
+        public float getPositionX();
+        public float getPositionY();
+        public void setPositionX(float x);
+        public void setPositionY(float y);
     }
 
 }

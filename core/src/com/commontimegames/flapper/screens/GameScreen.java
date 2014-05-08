@@ -65,10 +65,10 @@ public class GameScreen implements Screen,
                            Constants.WORLD_WIDTH, 1);
 
         pq = new ProceduralContentQueue();
-        pq.add(new Branch(Branch.BranchType.Double, world, Constants.WORLD_CENTER_X, 1 * Constants.CONTENT_OFFSET));
-        pq.add(new Branch(Branch.BranchType.Double, world, Constants.WORLD_CENTER_X, 3f * Constants.CONTENT_OFFSET));
-        pq.add(new Branch(Branch.BranchType.Double, world, Constants.WORLD_CENTER_X, 5 * Constants.CONTENT_OFFSET));
-        //pq.add(new Branch(Branch.BranchType.Double, world, Constants.WORLD_CENTER_X, 4 * Constants.CONTENT_OFFSET));
+
+        for(int i = 1; i < 17; i+=2){
+            pq.add(new Branch(world, Constants.WORLD_CENTER_X, i * Constants.CONTENT_OFFSET));
+        }
 
         world.setContactListener(this);
         Gdx.input.setInputProcessor(this);
