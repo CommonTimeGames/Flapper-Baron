@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.commontimegames.flapper.core.Constants;
 import com.commontimegames.flapper.core.GameObject;
 import com.commontimegames.flapper.core.RigidBody;
 
@@ -33,7 +34,7 @@ public class Squirrel extends RigidBody implements RigidBody.Collider{
 
         PolygonShape groundBox = new PolygonShape();
 
-        groundBox.setAsBox(1, 2);
+        groundBox.setAsBox(2, 2);
         body.createFixture(groundBox, 0.0f);
         body.setUserData(this);
 
@@ -44,7 +45,16 @@ public class Squirrel extends RigidBody implements RigidBody.Collider{
     public void onHit(GameObject g) {
         if(g instanceof Baron){
             state = SquirrelState.Dead;
-            //body.setType(BodyDef.BodyType.DynamicBody);
+            body.setType(BodyDef.BodyType.DynamicBody);
+            body.applyLinearImpulse(0,
+                                    Constants.SQUIRREL_DEATH_IMPULSE,
+                                    positionX,
+                                    positionY,
+                                    true);
+        } else if(Constants.GROUND_NAME.equalsIgnoreCase(g.getName())){
+            if(state == SquirrelState.Dead){
+                destroy();
+            }
         }
     }
 

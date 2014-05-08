@@ -47,9 +47,6 @@ public abstract class GameObject {
             g.parent = null;
             i.remove();
         }
-        if(parent != null){
-            parent.remove(this);
-        }
     }
 
     public GameObject getParent(){
@@ -89,7 +86,6 @@ public abstract class GameObject {
         for(GameObject g: children){
             float delta = g.getPositionY() - positionY;
             g.setPositionY(y + delta);
-            g.setPositionY(y);
         }
         positionY = y;
     }

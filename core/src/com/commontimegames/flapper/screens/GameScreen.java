@@ -65,10 +65,10 @@ public class GameScreen implements Screen,
                            Constants.WORLD_WIDTH, 1);
 
         pq = new ProceduralContentQueue();
-        pq.add(new Branch(Branch.BranchType.Left, world, Constants.WORLD_CENTER_X, 0));
-        pq.add(new Branch(Branch.BranchType.Left, world, Constants.WORLD_CENTER_X, 6));
-        pq.add(new Branch(Branch.BranchType.Left, world, Constants.WORLD_CENTER_X, 12));
-        pq.add(new Branch(Branch.BranchType.Left, world, Constants.WORLD_CENTER_X, 18));
+        pq.add(new Branch(Branch.BranchType.Double, world, Constants.WORLD_CENTER_X, 1 * Constants.CONTENT_OFFSET));
+        pq.add(new Branch(Branch.BranchType.Double, world, Constants.WORLD_CENTER_X, 3f * Constants.CONTENT_OFFSET));
+        pq.add(new Branch(Branch.BranchType.Double, world, Constants.WORLD_CENTER_X, 5 * Constants.CONTENT_OFFSET));
+        //pq.add(new Branch(Branch.BranchType.Double, world, Constants.WORLD_CENTER_X, 4 * Constants.CONTENT_OFFSET));
 
         world.setContactListener(this);
         Gdx.input.setInputProcessor(this);
@@ -86,9 +86,11 @@ public class GameScreen implements Screen,
 
         baron.update();
 
-        if(baron.getState() == Baron.BaronState.Flapping){
-            pq.scroll();
-        }
+        pq.scroll();
+
+        //if(baron.getState() == Baron.BaronState.Flapping){
+        //    pq.scroll();
+        //}
 
         pq.recycleOffScreen();
 
@@ -178,14 +180,32 @@ public class GameScreen implements Screen,
 
     @Override
     public void beginContact(Contact contact) {
-        GameObject a = (GameObject)contact.getFixtureA().getBody().getUserData();
-        GameObject b = (GameObject)contact.getFixtureB().getBody().getUserData();
+        final GameObject a = (GameObject)contact.getFixtureA().getBody().getUserData();
+        final GameObject b = (GameObject)contact.getFixtureB().getBody().getUserData();
 
+        /**
+         * #beginContact() is called during
+         * the Box2D step, so we cannot modify
+         * the world during this time. The solution?
+         * invoke the callback before the next call to
+         * #render(), when the world can be modified.
+         */
         if(a instanceof RigidBody.Collider){
-            ((RigidBody.Collider)a).onHit(b);
+            Gdx.app.postRunnable(new Runnable() {
+                @Override
+                public void run() {
+                    ((RigidBody.Collider)a).onHit(b);
+                }
+            });
+
         }
         if(b instanceof RigidBody.Collider){
-            ((RigidBody.Collider)b).onHit(a);
+            Gdx.app.postRunnable(new Runnable() {
+                @Override
+                public void run() {
+                    ((RigidBody.Collider)b).onHit(a);
+                }
+            });
         }
 
         Gdx.app.log("GameScreen", "Contact between " + a.getClass() + ", and " + b.getClass());

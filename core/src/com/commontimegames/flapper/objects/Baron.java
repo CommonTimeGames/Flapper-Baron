@@ -73,9 +73,9 @@ public class Baron extends RigidBody implements RigidBody.Collider{
                                 pos.y,
                                 true);
 
-        Gdx.app.log("Baron",
-                "Baron.flap(" + screenX + "," + screenY +
-                        ") -> (" + worldX + "," + worldY + ")");
+        //Gdx.app.log("Baron",
+        //        "Baron.flap(" + screenX + "," + screenY +
+        //                ") -> (" + worldX + "," + worldY + ")");
 
     }
     public void draw(SpriteBatch batch) {}

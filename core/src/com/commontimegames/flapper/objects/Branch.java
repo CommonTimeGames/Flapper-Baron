@@ -18,6 +18,7 @@ public class Branch extends GameObject implements ProceduralContentQueue.Procedu
 
     private BranchType branchType;
     private World world;
+    private Wall theWall;
 
 
     public Branch(World world,
@@ -43,22 +44,25 @@ public class Branch extends GameObject implements ProceduralContentQueue.Procedu
         switch (branchType){
             case Left:
                 add(new Squirrel(Squirrel.SquirrelType.Left, world, 0, 0),
-                        -1 * SQUIRREL_OFFSET, positionY);
+                        -1 * SQUIRREL_OFFSET, 0);
                 break;
             case Right:
                 add(new Squirrel(Squirrel.SquirrelType.Right, world, 0, 0),
-                        SQUIRREL_OFFSET, positionY);
+                        SQUIRREL_OFFSET, 0);
                 break;
             case Center:
                 add(new Squirrel(Squirrel.SquirrelType.Center, world, 0, 0));
                 break;
             case Double:
                 add(new Squirrel(Squirrel.SquirrelType.Left, world, 0, 0),
-                        -1 * SQUIRREL_OFFSET, positionY);
+                        -1 * SQUIRREL_OFFSET, 0);
                 add(new Squirrel(Squirrel.SquirrelType.Right, world, 0, 0),
-                        SQUIRREL_OFFSET, positionY);
+                        SQUIRREL_OFFSET, 0);
                 break;
         }
+        theWall = new Wall(world, positionX, positionY, 2, Constants.CONTENT_OFFSET);
+        theWall.getBody().setActive(false);
+        add(theWall);
     }
 
 
@@ -80,12 +84,13 @@ public class Branch extends GameObject implements ProceduralContentQueue.Procedu
 
     @Override
     public boolean isOffscreen() {
-        return positionY < 0;
+        return positionY < - 0.5 * Constants.CONTENT_OFFSET;
     }
 
     @Override
     public void scroll(float amount){
        setPositionY(positionY - amount);
+       Gdx.app.log("Branch", "Scrolled to : " + positionY);
     }
 
 

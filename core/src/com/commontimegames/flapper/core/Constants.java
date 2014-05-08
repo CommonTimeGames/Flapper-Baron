@@ -18,11 +18,12 @@ public class Constants {
 
     public static final double SCROLL_HEIGHT_THRESHOLD = 0.50;
     public static final float WORLD_SCROLL_SPEED = 0.1f;
-    public static final float CONTENT_OFFSET = 6f;
+    public static final float CONTENT_OFFSET = 3f;
 
     public static final float BOX_GRAVITY = 20;
     public static final float BOX_STEP_TIME = 1/45f;
 
     public static final String GROUND_NAME = "ground";
 
+    public static final int SQUIRREL_DEATH_IMPULSE = 20;
 }
