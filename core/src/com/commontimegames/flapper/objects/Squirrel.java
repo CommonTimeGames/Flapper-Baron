@@ -14,15 +14,14 @@ import com.commontimegames.flapper.core.RigidBody;
 public class Squirrel extends RigidBody implements RigidBody.Collider{
 
     private SquirrelType type;
-    private SquirrelState state;
-    private GameObject nut;
+    protected SquirrelState state;
 
     public Squirrel(SquirrelType type,
                     World world,
                     float positionX,
                     float positionY){
         super(positionX, positionY);
-        Gdx.app.log("Squirrel", "Squirrel position created at: " + positionX + ", " + positionY);
+        //Gdx.app.log("Squirrel", "Squirrel position created at: " + positionX + ", " + positionY);
         this.type = type;
         this.state = SquirrelState.Idle;
 
@@ -44,13 +43,22 @@ public class Squirrel extends RigidBody implements RigidBody.Collider{
     @Override
     public void onHit(GameObject g) {
         if(g instanceof Baron){
-            state = SquirrelState.Dead;
-            body.setType(BodyDef.BodyType.DynamicBody);
-            body.applyLinearImpulse(0,
-                                    Constants.SQUIRREL_DEATH_IMPULSE,
-                                    positionX,
-                                    positionY,
-                                    true);
+            Gdx.app.postRunnable(new Runnable() {
+                @Override
+                public void run() {
+                    if(parent != null){
+                        parent.remove(Squirrel.this);
+                    }
+                    state = SquirrelState.Dead;
+                    body.setType(BodyDef.BodyType.DynamicBody);
+                    body.applyLinearImpulse(random.nextInt(Constants.SQUIRREL_DEATH_IMPULSE),
+                            Constants.SQUIRREL_DEATH_IMPULSE,
+                            positionX,
+                            positionY,
+                            true);
+                }
+            });
+
         } else if(Constants.GROUND_NAME.equalsIgnoreCase(g.getName())){
             if(state == SquirrelState.Dead){
                 destroy();
@@ -60,7 +68,15 @@ public class Squirrel extends RigidBody implements RigidBody.Collider{
 
     public void destroy(){
         super.destroy();
-        Gdx.app.log("Squirrel", "Squirrel got destroyed!");
+        //Gdx.app.log("Squirrel", "Squirrel got destroyed!");
+    }
+
+    public SquirrelState getState(){
+        return state;
+    }
+
+    public void setState(SquirrelState state){
+        this.state = state;
     }
 
     public enum SquirrelType{

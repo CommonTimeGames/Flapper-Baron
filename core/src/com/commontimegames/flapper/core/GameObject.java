@@ -2,10 +2,10 @@ package com.commontimegames.flapper.core;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector2;
 
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Random;
 import java.util.Set;
 
 /**
@@ -22,6 +22,8 @@ public abstract class GameObject {
     protected float positionY;
 
     private String name;
+
+    protected static Random random = new Random();
 
     public GameObject(float positionX, float positionY){
         this.positionX = positionX;

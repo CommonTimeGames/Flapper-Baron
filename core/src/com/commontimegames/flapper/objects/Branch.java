@@ -1,6 +1,5 @@
 package com.commontimegames.flapper.objects;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.World;
 import com.commontimegames.flapper.core.Constants;
 import com.commontimegames.flapper.core.GameObject;
@@ -97,7 +96,7 @@ public class Branch extends GameObject implements ProceduralContentQueue.Procedu
     public void reset(){
         destroy();
         branchType = getNewBranchType();
-        Gdx.app.log("Branch", "Branch type changed to: " + branchType);
+        //Gdx.app.log("Branch", "Branch type changed to: " + branchType);
         init(world);
     }
 

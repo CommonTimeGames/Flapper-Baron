@@ -26,4 +26,7 @@ public class Constants {
     public static final String GROUND_NAME = "ground";
 
     public static final int SQUIRREL_DEATH_IMPULSE = 20;
+
+    public static final float FLAP_FORCE = 100;
+    public static final float SPIN_TIME = 0.75f;
 }

@@ -155,6 +155,11 @@ public class GameScreen implements Screen,
         //                   + " pointer: " + pointer
         //                   + " button: " + button);
         baron.flap(screenX, screenY);
+
+        if(button == Input.Buttons.RIGHT){
+            baron.spin();
+        }
+
         return true;
     }
 
@@ -208,7 +213,7 @@ public class GameScreen implements Screen,
             });
         }
 
-        Gdx.app.log("GameScreen", "Contact between " + a.getClass() + ", and " + b.getClass());
+        //Gdx.app.log("GameScreen", "Contact between " + a.getClass() + ", and " + b.getClass());
     }
 
     @Override
