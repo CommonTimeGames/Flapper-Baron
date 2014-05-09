@@ -21,7 +21,7 @@ public class Squirrel extends RigidBody implements RigidBody.Collider{
                     float positionX,
                     float positionY){
         super(positionX, positionY);
-        //Gdx.app.log("Squirrel", "Squirrel position created at: " + positionX + ", " + positionY);
+        Gdx.app.log("Squirrel", "Squirrel position created at: " + positionX + ", " + positionY);
         this.type = type;
         this.state = SquirrelState.Idle;
 

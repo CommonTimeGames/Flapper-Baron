@@ -43,10 +43,10 @@ public class ProceduralContentQueue {
             ProceduralContent p = i.next();
             p.reset();
 
-            ProceduralContent top = contentQueue.peekFirst();
+            ProceduralContent top = contentQueue.peekLast();
             p.setPositionY(top.getPositionY() + 2 * Constants.CONTENT_OFFSET);
 
-            contentQueue.addFirst(p);
+            contentQueue.addLast(p);
         }
 
         tempQueue.clear();

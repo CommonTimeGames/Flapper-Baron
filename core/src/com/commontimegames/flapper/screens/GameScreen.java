@@ -86,11 +86,13 @@ public class GameScreen implements Screen,
 
         baron.update();
 
-        pq.scroll();
+        if(baron.getState() != Baron.BaronState.Dead){
+            pq.scroll();
 
-        //if(baron.getState() == Baron.BaronState.Flapping){
-        //    pq.scroll();
-        //}
+            if(!baron.isFalling()){
+                pq.scroll();
+            }
+        }
 
         pq.recycleOffScreen();
 

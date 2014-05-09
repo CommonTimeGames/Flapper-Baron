@@ -78,7 +78,7 @@ public abstract class RigidBody extends GameObject {
     }
 
     public boolean isFalling(){
-        return body != null && body.getLinearVelocity().y < 0;
+        return body != null && body.getLinearVelocity().y <= 0;
     }
 
     public interface Collider{
